@@ -4,15 +4,634 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codingloo Labs</title>
+    <title>Codingloo Labs — Your Cool Partner in Digital Transformation</title>
+    <meta name="description" content="Codingloo Labs is a forward-thinking software startup delivering innovative web, mobile, and desktop solutions.">
     <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ── Design tokens ─────────────────────────────────────────── */
+        :root {
+            --clr-bg:        #070b14;
+            --clr-surface:   #0d1220;
+            --clr-card:      #111827;
+            --clr-border:    rgba(255,255,255,.07);
+            --clr-text:      #e2e8f0;
+            --clr-muted:     #8892a4;
+            --clr-primary:   #6c63ff;
+            --clr-secondary: #00d4ff;
+            --clr-accent:    #ff6584;
+            --gradient:      linear-gradient(135deg, #6c63ff 0%, #00d4ff 100%);
+            --gradient-r:    linear-gradient(135deg, #00d4ff 0%, #6c63ff 100%);
+            --shadow-card:   0 4px 24px rgba(0,0,0,.4);
+            --shadow-glow:   0 0 40px rgba(108,99,255,.25);
+            --radius:        14px;
+            --transition:    .3s cubic-bezier(.4,0,.2,1);
+        }
+
+        /* ── Base ───────────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--clr-bg);
+            color: var(--clr-text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1,h2,h3,h4,h5 { font-family: 'Space Grotesk', sans-serif; }
+
+        section { padding: 96px 0; }
+
+        .section-label {
+            display: inline-block;
+            font-size: .75rem;
+            font-weight: 600;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.75rem);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .section-sub {
+            font-size: 1.05rem;
+            color: var(--clr-muted);
+            max-width: 560px;
+        }
+
+        /* ── Gradient text util ─────────────────────────────────────── */
+        .grad-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── Scroll-reveal ──────────────────────────────────────────── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+        .reveal.visible { opacity: 1; transform: none; }
+
+        /* ── Navbar ─────────────────────────────────────────────────── */
+        #mainNav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 18px 0;
+            background: transparent;
+            transition: background var(--transition), padding var(--transition), backdrop-filter var(--transition);
+        }
+        #mainNav.scrolled {
+            background: rgba(7,11,20,.85);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            padding: 12px 0;
+            border-bottom: 1px solid var(--clr-border);
+        }
+
+        .navbar-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-link {
+            color: var(--clr-muted) !important;
+            font-weight: 500;
+            font-size: .9rem;
+            letter-spacing: .03em;
+            padding: 6px 14px !important;
+            border-radius: 8px;
+            transition: color var(--transition), background var(--transition);
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #fff !important;
+            background: rgba(108,99,255,.15);
+        }
+
+        .nav-cta {
+            background: var(--gradient) !important;
+            color: #fff !important;
+            padding: 8px 22px !important;
+            border-radius: 50px !important;
+            font-weight: 600 !important;
+            -webkit-text-fill-color: #fff !important;
+        }
+        .nav-cta:hover { opacity: .88; background: var(--gradient) !important; }
+
+        .navbar-toggler { border: 1px solid var(--clr-border); }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* ── Hero ───────────────────────────────────────────────────── */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(108,99,255,.35) 0%, transparent 60%),
+                        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(0,212,255,.2) 0%, transparent 55%),
+                        var(--clr-bg);
+        }
+
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+        .hero-orb-1 {
+            width: 500px; height: 500px;
+            background: rgba(108,99,255,.18);
+            top: -180px; right: -120px;
+            animation: orb-float 8s ease-in-out infinite;
+        }
+        .hero-orb-2 {
+            width: 360px; height: 360px;
+            background: rgba(0,212,255,.12);
+            bottom: -100px; left: -80px;
+            animation: orb-float 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes orb-float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50%       { transform: translateY(-30px) scale(1.04); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(108,99,255,.15);
+            border: 1px solid rgba(108,99,255,.35);
+            border-radius: 50px;
+            padding: 6px 16px;
+            font-size: .8rem;
+            font-weight: 600;
+            color: #a89dff;
+            margin-bottom: 28px;
+            letter-spacing: .05em;
+        }
+        .hero-badge-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #6c63ff;
+            animation: pulse-dot 2s ease infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: .5; transform: scale(1.4); }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            color: #fff;
+            margin-bottom: 24px;
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: var(--clr-muted);
+            max-width: 520px;
+            margin-bottom: 40px;
+        }
+
+        .btn-primary-grad {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gradient);
+            color: #fff;
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 50px;
+            border: none;
+            font-size: .95rem;
+            text-decoration: none;
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+        .btn-primary-grad:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(108,99,255,.45);
+            color: #fff;
+        }
+
+        .btn-outline-light-custom {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--clr-text);
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 50px;
+            border: 1px solid var(--clr-border);
+            font-size: .95rem;
+            text-decoration: none;
+            transition: border-color var(--transition), background var(--transition);
+        }
+        .btn-outline-light-custom:hover {
+            border-color: rgba(108,99,255,.5);
+            background: rgba(108,99,255,.08);
+            color: #fff;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 56px;
+            padding-top: 40px;
+            border-top: 1px solid var(--clr-border);
+        }
+        .hero-stat-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-stat-label {
+            font-size: .8rem;
+            color: var(--clr-muted);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        /* Hero right panel — floating cards */
+        .hero-visual {
+            position: relative;
+        }
+        .hero-card-float {
+            background: var(--clr-card);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            box-shadow: var(--shadow-card);
+            backdrop-filter: blur(8px);
+        }
+        .float-card-1 {
+            animation: float-a 6s ease-in-out infinite;
+        }
+        .float-card-2 {
+            animation: float-b 7s ease-in-out infinite;
+            margin-top: 20px;
+        }
+        .float-card-3 {
+            animation: float-a 8s ease-in-out infinite reverse;
+            margin-top: 20px;
+        }
+        @keyframes float-a {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-12px); }
+        }
+        @keyframes float-b {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(10px); }
+        }
+        .tech-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(108,99,255,.12);
+            border: 1px solid rgba(108,99,255,.2);
+            border-radius: 50px;
+            padding: 4px 12px;
+            font-size: .75rem;
+            color: #a89dff;
+            font-weight: 500;
+        }
+
+        /* ── About ──────────────────────────────────────────────────── */
+        #about { background: var(--clr-surface); }
+
+        .about-card {
+            background: var(--clr-card);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius);
+            padding: 28px;
+            transition: transform var(--transition), border-color var(--transition);
+        }
+        .about-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(108,99,255,.4);
+        }
+        .about-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+        }
+
+        /* ── Services ───────────────────────────────────────────────── */
+        #services { background: var(--clr-bg); }
+
+        .service-card {
+            background: var(--clr-card);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius);
+            padding: 36px 28px;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transition: transform var(--transition);
+        }
+        .service-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(108,99,255,.35);
+            box-shadow: var(--shadow-glow);
+        }
+        .service-card:hover::before { transform: scaleX(1); }
+
+        .service-icon {
+            width: 56px; height: 56px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            background: rgba(108,99,255,.15);
+            color: #a89dff;
+        }
+        .service-card h5 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .service-card p {
+            font-size: .9rem;
+            color: var(--clr-muted);
+            margin: 0;
+        }
+
+        /* ── Projects ───────────────────────────────────────────────── */
+        #projects { background: var(--clr-surface); }
+
+        .project-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .tab-btn {
+            background: var(--clr-card);
+            border: 1px solid var(--clr-border);
+            color: var(--clr-muted);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: .85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--gradient);
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .project-grid { display: none; }
+        .project-grid.active { display: flex; }
+
+        .project-card {
+            background: var(--clr-card);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            height: 100%;
+            transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+        }
+        .project-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(108,99,255,.4);
+            box-shadow: var(--shadow-glow);
+        }
+        .project-card-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+        }
+        .project-card-body {
+            padding: 20px;
+        }
+        .project-card-body h5 {
+            font-size: .95rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .project-card-body p {
+            font-size: .82rem;
+            color: var(--clr-muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+        .project-category-badge {
+            display: inline-block;
+            font-size: .7rem;
+            font-weight: 600;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+        }
+        .badge-foss    { background: rgba(108,99,255,.15); color: #a89dff; border: 1px solid rgba(108,99,255,.25); }
+        .badge-product { background: rgba(0,212,255,.12);  color: #60d8f8; border: 1px solid rgba(0,212,255,.25); }
+        .badge-client  { background: rgba(255,101,132,.12);color: #ff8fa3; border: 1px solid rgba(255,101,132,.25); }
+        .badge-rnd     { background: rgba(52,211,153,.12); color: #6ee7b7; border: 1px solid rgba(52,211,153,.25); }
+
+        /* ── Contact ────────────────────────────────────────────────── */
+        #contact { background: var(--clr-bg); }
+
+        .contact-wrapper {
+            background: var(--clr-card);
+            border: 1px solid var(--clr-border);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .contact-info {
+            background: linear-gradient(160deg, rgba(108,99,255,.25) 0%, rgba(0,212,255,.15) 100%);
+            padding: 48px 40px;
+            height: 100%;
+        }
+        .contact-info h3 {
+            font-size: 1.6rem;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+        .contact-info p { color: var(--clr-muted); margin-bottom: 32px; }
+
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .contact-info-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            background: rgba(108,99,255,.2);
+            display: flex; align-items: center; justify-content: center;
+            color: #a89dff;
+            flex-shrink: 0;
+        }
+        .contact-info-item span { font-size: .9rem; color: var(--clr-text); }
+
+        .contact-form { padding: 48px 40px; }
+
+        .form-label { color: var(--clr-muted); font-size: .85rem; font-weight: 500; margin-bottom: 6px; }
+
+        .form-control {
+            background: var(--clr-surface) !important;
+            border: 1px solid var(--clr-border) !important;
+            color: var(--clr-text) !important;
+            border-radius: 10px !important;
+            padding: 12px 16px !important;
+            font-size: .9rem;
+            transition: border-color var(--transition), box-shadow var(--transition) !important;
+        }
+        .form-control:focus {
+            border-color: rgba(108,99,255,.5) !important;
+            box-shadow: 0 0 0 3px rgba(108,99,255,.12) !important;
+            outline: none;
+        }
+        .form-control::placeholder { color: rgba(136,146,164,.5) !important; }
+
+        /* ── Footer ─────────────────────────────────────────────────── */
+        footer {
+            background: var(--clr-surface);
+            border-top: 1px solid var(--clr-border);
+            padding: 64px 0 32px;
+        }
+        .footer-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .footer-desc { font-size: .85rem; color: var(--clr-muted); max-width: 280px; }
+
+        .footer-heading {
+            font-size: .75rem;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--clr-muted);
+            margin-bottom: 16px;
+        }
+        .footer-link {
+            display: block;
+            font-size: .88rem;
+            color: var(--clr-muted);
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: color var(--transition);
+        }
+        .footer-link:hover { color: #fff; }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: var(--clr-card);
+            border: 1px solid var(--clr-border);
+            color: var(--clr-muted);
+            text-decoration: none;
+            font-size: .9rem;
+            transition: all var(--transition);
+        }
+        .social-btn:hover {
+            background: var(--gradient);
+            border-color: transparent;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--clr-border);
+            padding-top: 28px;
+            margin-top: 48px;
+        }
+
+        /* ── Misc utils ─────────────────────────────────────────────── */
+        .divider {
+            width: 48px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 2px;
+            margin: 20px 0 32px;
+        }
+
+        @media (max-width: 768px) {
+            section { padding: 72px 0; }
+            .hero-stats { gap: 28px; }
+            .contact-info, .contact-form { padding: 32px 24px; }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <!-- ── Navbar ──────────────────────────────────────────────────────── -->
+    <nav id="mainNav" class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#">Codingloo Labs</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -20,115 +639,108 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center gap-1">
                     <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                     <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
+                    <li class="nav-item ms-2"><a class="nav-link nav-cta" href="#contact">Get in Touch</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Home Section -->
-    <section id="home" class="bg-light text-center py-5">
-        <div class="container">
-            <h1>Codingloo Labs</h1>
-            <p>Your cool partner in digital transformation.</p>
-        </div>
+    <!-- ── Hero ────────────────────────────────────────────────────────── -->
+    <section id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
 
-        <div id="carouselExampleCaptions" class="carousel slide">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
-                    aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
-                    aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-                    aria-label="Slide 3"></button>
-            </div>
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="..." class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>First slide label</h5>
-                        <p>Some representative placeholder content for the first slide.</p>
+        <div class="container position-relative">
+            <div class="row align-items-center g-5">
+                <!-- Left content -->
+                <div class="col-lg-6">
+                    <div class="hero-badge">
+                        <div class="hero-badge-dot"></div>
+                        Available for new projects
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="..." class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>Second slide label</h5>
-                        <p>Some representative placeholder content for the second slide.</p>
+                    <h1 class="hero-title">
+                        Building <span class="grad-text">Digital Products</span> That Move the World Forward
+                    </h1>
+                    <p class="hero-desc">
+                        We're a forward-thinking software startup crafting web, mobile, and desktop solutions
+                        that drive growth and transform your vision into reality.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="#projects" class="btn-primary-grad">
+                            View Our Work <i class="fa-solid fa-arrow-right fa-sm"></i>
+                        </a>
+                        <a href="#contact" class="btn-outline-light-custom">
+                            Let's Talk <i class="fa-regular fa-comment fa-sm"></i>
+                        </a>
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="..." class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>Third slide label</h5>
-                        <p>Some representative placeholder content for the third slide.</p>
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    </section>
 
-    <!-- About Us Section -->
-    <section id="about" class="py-5">
-        <div class="container">
-            <h2>About Us</h2>
-            <p>We are a forward-thinking software startup dedicated to delivering innovative solutions that drive
-                success and growth for our clients.</p>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="bg-light py-5">
-        <div class="container">
-            <h2>Our Services</h2>
-            <div class="row">
-                <div class="col-md-6 col-lg-3 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Web Application Development</h5>
-                            <p class="card-text">Crafting responsive and user-friendly web applications tailored to your
-                                needs.</p>
+                    <div class="hero-stats">
+                        <div>
+                            <div class="hero-stat-num">8+</div>
+                            <div class="hero-stat-label">Years Active</div>
+                        </div>
+                        <div>
+                            <div class="hero-stat-num">17+</div>
+                            <div class="hero-stat-label">Projects Built</div>
+                        </div>
+                        <div>
+                            <div class="hero-stat-num">4</div>
+                            <div class="hero-stat-label">Service Areas</div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Mobile Application Development</h5>
-                            <p class="card-text">Creating seamless mobile experiences for iOS and Android platforms.</p>
+
+                <!-- Right visual -->
+                <div class="col-lg-6 d-none d-lg-block hero-visual">
+                    <div class="ps-4">
+                        <div class="hero-card-float float-card-1 hero-card-float">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div style="width:36px;height:36px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;">
+                                    <i class="fa-solid fa-code text-white fa-sm"></i>
+                                </div>
+                                <div>
+                                    <div style="font-size:.8rem;color:var(--clr-muted);">Currently building</div>
+                                    <div style="font-size:.9rem;font-weight:600;color:#fff;">Full-Stack Web App</div>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <span class="tech-pill"><i class="fa-brands fa-react fa-xs"></i> React</span>
+                                <span class="tech-pill"><i class="fa-brands fa-node fa-xs"></i> Node.js</span>
+                                <span class="tech-pill">PostgreSQL</span>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Desktop Application Development</h5>
-                            <p class="card-text">Building robust and efficient desktop applications for various
-                                operating systems.</p>
+
+                        <div class="hero-card-float float-card-2">
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,212,255,.15);display:flex;align-items:center;justify-content:center;">
+                                    <i class="fa-solid fa-mobile-screen text-info fa-sm"></i>
+                                </div>
+                                <div>
+                                    <div style="font-size:.8rem;color:var(--clr-muted);">Mobile development</div>
+                                    <div style="font-size:.9rem;font-weight:600;color:#fff;">iOS & Android</div>
+                                </div>
+                            </div>
+                            <div style="height:4px;border-radius:4px;background:var(--clr-surface);overflow:hidden;">
+                                <div style="width:72%;height:100%;background:linear-gradient(90deg,#6c63ff,#00d4ff);border-radius:4px;"></div>
+                            </div>
+                            <div style="font-size:.72rem;color:var(--clr-muted);margin-top:6px;">72% complete</div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Digital Media Management</h5>
-                            <p class="card-text">Enhancing your digital presence with expert media management
-                                strategies.</p>
+
+                        <div class="hero-card-float float-card-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-circle-check" style="color:#34d399;font-size:1rem;"></i>
+                                <span style="font-size:.88rem;color:#fff;font-weight:500;">17 projects delivered</span>
+                            </div>
+                            <div class="d-flex gap-1 mt-2">
+                                <div style="height:6px;border-radius:4px;background:var(--gradient);flex:1;"></div>
+                                <div style="height:6px;border-radius:4px;background:rgba(108,99,255,.25);width:20%;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -136,191 +748,60 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="py-5">
+    <!-- ── About ────────────────────────────────────────────────────────── -->
+    <section id="about">
         <div class="container">
-            <h2>Our Work</h2>
-            <p>Explore some of our latest projects that demonstrate our expertise and creativity.</p>
-
-            <h4> Free and Open Source Projects </h4>
-
-            <div class="row row-cols-1 row-cols-md-6 g-4">
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/coding_igloo.gif" class="card-img-top" alt="Coding Igloo">
-                        <div class="card-body">
-                            <h5 class="card-title" href="#">Coding Igloo</h5>
-                            <p class="card-text">Platform where we create and share simplified Learning materials,
-                                Articles, Tips and Tricks for the New Bees in the IT Industry.</p>
-                        </div>
-                    </div>
+            <div class="row align-items-center g-5">
+                <div class="col-lg-5 reveal">
+                    <span class="section-label">About Us</span>
+                    <h2 class="section-title">We Turn Bold Ideas Into Working Software</h2>
+                    <div class="divider"></div>
+                    <p style="color:var(--clr-muted);margin-bottom:24px;">
+                        Founded with a passion for technology and innovation, Codingloo Labs is a team of dedicated
+                        engineers and designers who love building things that matter.
+                    </p>
+                    <p style="color:var(--clr-muted);">
+                        From open-source contributions to enterprise-grade systems, we bring the same level of
+                        craftsmanship and commitment to every project we take on.
+                    </p>
                 </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/un1que_sri_lanka.jpeg" class="card-img-top" alt="Un1que Sri Lanka">
-                        <div class="card-body">
-                            <h5 class="card-title">Un1que Sri Lanka</h5>
-                            <p class="card-text">A comprehensive online resource for all your travel needs in Sri Lanka.
-                                Whether you're planning a vacation or a business trip.</p>
+                <div class="col-lg-7">
+                    <div class="row g-3">
+                        <div class="col-6 reveal">
+                            <div class="about-card">
+                                <div class="about-icon" style="background:rgba(108,99,255,.15);color:#a89dff;">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                </div>
+                                <h5 style="color:#fff;font-size:.95rem;margin-bottom:8px;">Innovation First</h5>
+                                <p style="color:var(--clr-muted);font-size:.85rem;margin:0;">We embrace emerging technologies to deliver solutions that are ahead of the curve.</p>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/tod2.jpeg" class="card-img-top" alt="TOD">
-                        <div class="card-body">
-                            <h5 class="card-title">TOD : Transport on Demand</h5>
-                            <p class="card-text">Public Transport Management System in both Web and Mobile platforms</p>
+                        <div class="col-6 reveal">
+                            <div class="about-card">
+                                <div class="about-icon" style="background:rgba(0,212,255,.12);color:#60d8f8;">
+                                    <i class="fa-solid fa-users"></i>
+                                </div>
+                                <h5 style="color:#fff;font-size:.95rem;margin-bottom:8px;">Client-Centric</h5>
+                                <p style="color:var(--clr-muted);font-size:.85rem;margin:0;">Your goals drive our process. We collaborate closely to make your vision real.</p>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/liot.jpeg" class="card-img-top" alt="LIOT">
-                        <div class="card-body">
-                            <h5 class="card-title">LIOT</h5>
-                            <p class="card-text">Online Educational institute data management system including student
-                                registration, time scheduling and etc...</p>
+                        <div class="col-6 reveal">
+                            <div class="about-card">
+                                <div class="about-icon" style="background:rgba(52,211,153,.12);color:#6ee7b7;">
+                                    <i class="fa-solid fa-code-branch"></i>
+                                </div>
+                                <h5 style="color:#fff;font-size:.95rem;margin-bottom:8px;">Open Source Love</h5>
+                                <p style="color:var(--clr-muted);font-size:.85rem;margin:0;">We actively contribute to and maintain open-source projects for the community.</p>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/medicare.jpeg" class="card-img-top" alt="Medi Care">
-                        <div class="card-body">
-                            <h5 class="card-title">Medi Care</h5>
-                            <p class="card-text">Hospital Management Sytems which can be customized as for the
-                                requirement.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/destine.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Destine</h5>
-                            <p class="card-text">A value added services providing Web application for construction
-                                industry.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <h4 style="margin-top: 10px;"> Our Products & Services</h4>
-            <h5 style="margin-top: 10px;">Company Owned</h5>
-
-            <div class="row row-cols-1 row-cols-md-6 g-4">
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/filtered_zone.jpg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title" href="#">Filtered Zone</h5>
-                            <p class="card-text">Platform where we create and share simplified Learning materials,
-                                Articles, Tips and Tricks for the New Bees in the IT Industry.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/virgo.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Virgo</h5>
-                            <p class="card-text">Small Scale Business Management System which track products from one
-                                end to the other along the supply chain.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/tod2.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">TOD for Staff</h5>
-                            <p class="card-text">Public Transport Management System in both Web and Mobile platforms</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/droply.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Droply</h5>
-                            <p class="card-text">Online Delivery App which can be customize according to the customer
-                                requirement.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/ems.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">EOD</h5>
-                            <p class="card-text">Event Management System which can be used to manage defirrent kind of
-                                events.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h5 style="margin-top: 10px;">Customer Owned</h5>
-
-            <div class="row row-cols-1 row-cols-md-6 g-4">
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/cgj.jpg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title" href="#">CGJ</h5>
-                            <p class="card-text">Web application for a jewelry Shop located in Hikkaduwa (CGJ). Where
-                                customers can interact with the shop</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/niveja.jpg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Niveja</h5>
-                            <p class="card-text">Official web app for Niveja Tea & Spice Store Located in Galle,
-                                Sri Lanka. Where Customer can engage with the spice store and view their products and
-                                other relevant details.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h4 style="margin-top: 10px;">Research and Development Work (FOSS)</h4>
-            <div class="row row-cols-1 row-cols-md-6 g-4">
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/leoos.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title" href="#">Leo OS</h5>
-                            <p class="card-text">Linux based customized operating system</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/sams.webp" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">SAMS</h5>
-                            <p class="card-text">Student Attendance Management System for the universities.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/robotxp.webp" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Robot XP</h5>
-                            <p class="card-text">Modern Day Robotic made with Arduino and recycled parts</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="./assets/images/das.webp" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Domestic Power Automation System</h5>
-                            <p class="card-text">Arduino Based Domestic Poert Automation Syst.em</p>
+                        <div class="col-6 reveal">
+                            <div class="about-card">
+                                <div class="about-icon" style="background:rgba(255,101,132,.12);color:#ff8fa3;">
+                                    <i class="fa-solid fa-rocket"></i>
+                                </div>
+                                <h5 style="color:#fff;font-size:.95rem;margin-bottom:8px;">Fast Delivery</h5>
+                                <p style="color:var(--clr-muted);font-size:.85rem;margin:0;">Agile workflows and clear milestones keep projects on track and on time.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -328,37 +809,418 @@
         </div>
     </section>
 
-    <!-- Contact Us Section -->
-    <section id="contact" class="bg-light py-5">
+    <!-- ── Services ──────────────────────────────────────────────────────── -->
+    <section id="services">
         <div class="container">
-            <h2>Contact Us</h2>
-            <form>
-                <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" placeholder="Your Name">
+            <div class="text-center mb-5 reveal">
+                <span class="section-label">What We Do</span>
+                <h2 class="section-title">Our Services</h2>
+                <p class="section-sub mx-auto">End-to-end software development across every platform — built to scale with your ambitions.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3 reveal">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <h5>Web Application Development</h5>
+                        <p>Crafting responsive, performant web applications tailored to your unique business needs and users.</p>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="Your Email">
+                <div class="col-md-6 col-lg-3 reveal">
+                    <div class="service-card">
+                        <div class="service-icon" style="background:rgba(0,212,255,.12);color:#60d8f8;">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <h5>Mobile App Development</h5>
+                        <p>Creating seamless native and cross-platform experiences for iOS and Android that users love.</p>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="message" class="form-label">Message</label>
-                    <textarea class="form-control" id="message" rows="4" placeholder="Your Message"></textarea>
+                <div class="col-md-6 col-lg-3 reveal">
+                    <div class="service-card">
+                        <div class="service-icon" style="background:rgba(52,211,153,.12);color:#6ee7b7;">
+                            <i class="fa-solid fa-desktop"></i>
+                        </div>
+                        <h5>Desktop Application Development</h5>
+                        <p>Building robust, cross-platform desktop software with modern UIs and deep system integration.</p>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Send Message</button>
-            </form>
+                <div class="col-md-6 col-lg-3 reveal">
+                    <div class="service-card">
+                        <div class="service-icon" style="background:rgba(255,101,132,.12);color:#ff8fa3;">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h5>Digital Media Management</h5>
+                        <p>Elevating your digital presence with expert content strategy, branding, and media management.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3">
+    <!-- ── Projects ──────────────────────────────────────────────────────── -->
+    <section id="projects">
         <div class="container">
-            <p>&copy; 2017-2025 Codingloo Labs. All rights reserved.</p>
+            <div class="mb-5 reveal">
+                <span class="section-label">Portfolio</span>
+                <h2 class="section-title">Our Work</h2>
+                <p class="section-sub">Explore our projects spanning open source, products, client work, and research.</p>
+            </div>
+
+            <!-- Tab buttons -->
+            <div class="project-tabs reveal">
+                <button class="tab-btn active" data-tab="foss">Open Source</button>
+                <button class="tab-btn" data-tab="products">Products</button>
+                <button class="tab-btn" data-tab="clients">Client Work</button>
+                <button class="tab-btn" data-tab="rnd">R&amp;D</button>
+            </div>
+
+            <!-- FOSS -->
+            <div class="project-grid active row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-4" id="tab-foss">
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/coding_igloo.gif" class="project-card-img" alt="Coding Igloo">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-foss">FOSS</span>
+                            <h5>Coding Igloo</h5>
+                            <p>Platform for simplified learning materials, articles, and tips for newcomers in the IT industry.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/un1que_sri_lanka.jpeg" class="project-card-img" alt="Un1que Sri Lanka">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-foss">FOSS</span>
+                            <h5>Un1que Sri Lanka</h5>
+                            <p>Comprehensive online resource for travel in Sri Lanka — perfect for vacation or business trips.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/tod2.jpeg" class="project-card-img" alt="TOD">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-foss">FOSS</span>
+                            <h5>TOD: Transport on Demand</h5>
+                            <p>Public transport management system available on both web and mobile platforms.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/liot.jpeg" class="project-card-img" alt="LIOT">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-foss">FOSS</span>
+                            <h5>LIOT</h5>
+                            <p>Online educational institute data management including student registration and scheduling.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/medicare.jpeg" class="project-card-img" alt="Medi Care">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-foss">FOSS</span>
+                            <h5>Medi Care</h5>
+                            <p>Customizable hospital management system built to fit diverse healthcare requirements.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/destine.jpeg" class="project-card-img" alt="Destine">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-foss">FOSS</span>
+                            <h5>Destine</h5>
+                            <p>Value-added services web application tailored for the construction industry.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div class="project-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4" id="tab-products">
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/filtered_zone.jpg" class="project-card-img" alt="Filtered Zone">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-product">Product</span>
+                            <h5>Filtered Zone</h5>
+                            <p>Learning platform sharing simplified IT materials, articles, tips, and tricks.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/virgo.jpeg" class="project-card-img" alt="Virgo">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-product">Product</span>
+                            <h5>Virgo</h5>
+                            <p>Small-scale business management system tracking products across the entire supply chain.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/tod2.jpeg" class="project-card-img" alt="TOD for Staff">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-product">Product</span>
+                            <h5>TOD for Staff</h5>
+                            <p>Staff-side portal for the TOD public transport management platform.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/droply.jpeg" class="project-card-img" alt="Droply">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-product">Product</span>
+                            <h5>Droply</h5>
+                            <p>Customizable online delivery app built to adapt to any business model.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/ems.jpeg" class="project-card-img" alt="EOD">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-product">Product</span>
+                            <h5>EOD</h5>
+                            <p>Event management system capable of handling diverse event types and scales.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clients -->
+            <div class="project-grid row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" id="tab-clients">
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/cgj.jpg" class="project-card-img" alt="CGJ">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-client">Client</span>
+                            <h5>CGJ Jewelry</h5>
+                            <p>Web application for a jewelry shop in Hikkaduwa enabling customer–store interaction.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/niveja.jpg" class="project-card-img" alt="Niveja">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-client">Client</span>
+                            <h5>Niveja</h5>
+                            <p>Official web app for Niveja Tea & Spice Store in Galle, Sri Lanka — showcasing products and store details.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- R&D -->
+            <div class="project-grid row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" id="tab-rnd">
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/leoos.jpeg" class="project-card-img" alt="Leo OS">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-rnd">R&amp;D</span>
+                            <h5>Leo OS</h5>
+                            <p>Linux-based customized operating system built for performance and flexibility.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/sams.webp" class="project-card-img" alt="SAMS">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-rnd">R&amp;D</span>
+                            <h5>SAMS</h5>
+                            <p>Student attendance management system designed for university environments.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/robotxp.webp" class="project-card-img" alt="Robot XP">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-rnd">R&amp;D</span>
+                            <h5>Robot XP</h5>
+                            <p>Modern robotics project built with Arduino and repurposed recycled components.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col reveal">
+                    <div class="project-card">
+                        <img src="./assets/images/das.webp" class="project-card-img" alt="DAS">
+                        <div class="project-card-body">
+                            <span class="project-category-badge badge-rnd">R&amp;D</span>
+                            <h5>Domestic Power Automation</h5>
+                            <p>Arduino-based domestic power automation system for smart home control.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Contact ────────────────────────────────────────────────────────── -->
+    <section id="contact">
+        <div class="container">
+            <div class="text-center mb-5 reveal">
+                <span class="section-label">Get in Touch</span>
+                <h2 class="section-title">Let's Build Something Great</h2>
+                <p class="section-sub mx-auto">Have a project in mind? We'd love to hear about it. Drop us a message and we'll get back to you promptly.</p>
+            </div>
+
+            <div class="contact-wrapper reveal">
+                <div class="row g-0">
+                    <div class="col-lg-5">
+                        <div class="contact-info">
+                            <h3>Contact Information</h3>
+                            <p>Fill out the form and our team will get back to you within 24 hours.</p>
+
+                            <div class="contact-info-item">
+                                <div class="contact-info-icon">
+                                    <i class="fa-solid fa-envelope fa-sm"></i>
+                                </div>
+                                <span>hello@codingloo.com</span>
+                            </div>
+                            <div class="contact-info-item">
+                                <div class="contact-info-icon">
+                                    <i class="fa-solid fa-location-dot fa-sm"></i>
+                                </div>
+                                <span>Sri Lanka</span>
+                            </div>
+                            <div class="contact-info-item">
+                                <div class="contact-info-icon">
+                                    <i class="fa-brands fa-github fa-sm"></i>
+                                </div>
+                                <span>github.com/codingloo</span>
+                            </div>
+
+                            <div class="d-flex gap-2 mt-4">
+                                <a href="#" class="social-btn"><i class="fa-brands fa-github"></i></a>
+                                <a href="#" class="social-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+                                <a href="#" class="social-btn"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="#" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="contact-form">
+                            <form>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-sm-6">
+                                        <label for="name" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="name" placeholder="John Doe">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" placeholder="john@example.com">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">Subject</label>
+                                    <input type="text" class="form-control" id="subject" placeholder="How can we help?">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea class="form-control" id="message" rows="5" placeholder="Tell us about your project..."></textarea>
+                                </div>
+                                <button type="submit" class="btn-primary-grad w-100 justify-content-center">
+                                    Send Message <i class="fa-solid fa-paper-plane fa-sm"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+    <footer>
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <div class="footer-brand">Codingloo Labs</div>
+                    <p class="footer-desc">Your cool partner in digital transformation. Building software that drives growth since 2017.</p>
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="#" class="social-btn"><i class="fa-brands fa-github"></i></a>
+                        <a href="#" class="social-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="social-btn"><i class="fa-brands fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <div class="footer-heading">Company</div>
+                    <a href="#about" class="footer-link">About Us</a>
+                    <a href="#services" class="footer-link">Services</a>
+                    <a href="#projects" class="footer-link">Projects</a>
+                    <a href="#contact" class="footer-link">Contact</a>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <div class="footer-heading">Services</div>
+                    <a href="#services" class="footer-link">Web Development</a>
+                    <a href="#services" class="footer-link">Mobile Apps</a>
+                    <a href="#services" class="footer-link">Desktop Apps</a>
+                    <a href="#services" class="footer-link">Digital Media</a>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <div class="footer-heading">Projects</div>
+                    <a href="#projects" class="footer-link">Open Source</a>
+                    <a href="#projects" class="footer-link">Our Products</a>
+                    <a href="#projects" class="footer-link">Client Work</a>
+                    <a href="#projects" class="footer-link">R&amp;D</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+                <p style="color:var(--clr-muted);font-size:.85rem;margin:0;">&copy; 2017–2025 Codingloo Labs. All rights reserved.</p>
+                <p style="color:var(--clr-muted);font-size:.85rem;margin:0;">Built with <span class="grad-text">❤</span> in Sri Lanka</p>
+            </div>
         </div>
     </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 
+    <script>
+        /* Navbar scroll effect */
+        const nav = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 40);
+        });
+
+        /* Active nav link on scroll */
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+                    if (active) active.classList.add('active');
+                }
+            });
+        }, { threshold: 0.4 });
+        sections.forEach(s => observer.observe(s));
+
+        /* Scroll reveal */
+        const revealObs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+        /* Project tabs */
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.project-grid').forEach(g => g.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+            });
+        });
+    </script>
+
+</body>
 </html>
